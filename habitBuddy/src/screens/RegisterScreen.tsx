@@ -3,12 +3,6 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 
-// Define the types directly here
-interface User {
-  email: string;
-  password: string;
-}
-
 interface ApiResponse {
   message: string;
   userId?: string;
@@ -17,12 +11,14 @@ interface ApiResponse {
 const RegisterScreen = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [name, setName] = useState<string>('');
 
   const handleRegister = async () => {
     try {
       const response = await axios.post<ApiResponse>('https://asia-south1-habitbuddy-d67d1.cloudfunctions.net/userservice/users/createUser', {
         email,
-        password
+        password,
+        name
       });
 
       Alert.alert('Success', response.data.message);
@@ -48,6 +44,12 @@ const RegisterScreen = ({ navigation }: { navigation: any }) => {
         value={password}
         onChangeText={setPassword}
         secureTextEntry
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+        value={name}
+        onChangeText={setName}
       />
       <Button title="Register" onPress={handleRegister} />
     </View>
